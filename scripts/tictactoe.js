@@ -24,9 +24,16 @@ var gameManager = (function() {
 
     function _minimax(isCpu, depth)
     {
+
+        let score = _evaluateBoard();
+        if(score == 10 || score == -10)
+        {
+            return score;
+        }
+
         if(_isBoardInTerminalState())
         {
-            return _evaluateBoard();
+            return 0;
         }
 
         if(isCpu)
@@ -85,8 +92,14 @@ var gameManager = (function() {
             {
                 if(_gameBoard[i][j] == _emptyChar)
                 {
+                    //make a move
                     _gameBoard[i][j] = _cpuChar;
+
+                    //evaluate score
                     let value = _minimax(false, 0);
+                    console.log(`Value = ${value} at position ${i} ${j}`);
+
+                    //undo move
                     _gameBoard[i][j] = _emptyChar;
 
                     if(value > bestValue)
@@ -219,9 +232,9 @@ var gameManager = (function() {
 
     function initGame() {
 
-        _gameBoard.push(["_","_","_"]);
-        _gameBoard.push(["_","_","_"]);
-        _gameBoard.push(["_","_","_"]);
+        _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
+        _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
+        _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
         
     }
 
@@ -229,17 +242,17 @@ var gameManager = (function() {
 
         while(!_isBoardInTerminalState())
         {
-            let usrTurn = window.prompt("Where would you like to play?", "row col");
-            console.log(usrTurn);
+            if(!_isBoardInTerminalState())
+            {
+                let usrTurn = window.prompt("Where would you like to play?", "row col");
+                console.log(usrTurn);
 
-            let usrSelection = usrTurn.split(' ');
+                let usrSelection = usrTurn.split(' ');
 
-            _gameBoard[usrSelection[0]][usrSelection[1]] = "x";
-            printBoard();
-
-            let cpuMove = _findBestMove();
-            _gameBoard[cpuMove[0]][cpuMove[1]] = "o";
-            printBoard();
+                _gameBoard[usrSelection[0]][usrSelection[1]] = "x";
+                printBoard();
+            }
+            
 
             const score = _evaluateBoard();
             if(score == -10)
@@ -257,6 +270,14 @@ var gameManager = (function() {
                 console.log("Tie");
                 return;
             }
+
+            if(!_isBoardInTerminalState())
+            {
+                let cpuMove = _findBestMove();
+                _gameBoard[cpuMove[0]][cpuMove[1]] = "o";
+                printBoard();
+            }
+            
 
         }
     }
