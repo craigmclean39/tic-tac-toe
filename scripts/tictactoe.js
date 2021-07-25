@@ -22,7 +22,7 @@ var gameState = (function() {
         return true;
     }
 
-    function _minimax(gameBoard, isCpu)
+    function _minimax(gameBoard, isCpu, depth)
     {
         if(_isBoardInTerminalState(gameBoard))
         {
@@ -42,12 +42,14 @@ var gameState = (function() {
                         gameBoard[i][j] = _cpuChar;
                         
                         //now recursively go through the function again, but as the players turn
-                        let value = _minimax(gameBoard, false);
+                        let value = _minimax(gameBoard, false, depth + 1);
                         bestValue = Math.max(bestValue, value);
+
+                        gameBoard[i][j] = _emptyChar;
                     }
                 }
             }
-            return bestValue;
+            return bestValue + depth;
         }
         else
         {
@@ -59,14 +61,47 @@ var gameState = (function() {
                     if(gameBoard[i][j] == _emptyChar)
                     {
                         gameBoard[i][j] = _playerChar;
-                        let value = _minimax(gameBoard, true);
+                        let value = _minimax(gameBoard, true, depth + 1);
                         bestValue = Math.min(bestValue, value);
+
+                        _gameBoard[i][j] = _emptyChar;
                     }
                 }
             }
-            return bestValue;
+            return bestValue - depth;
         }
         
+    }
+
+    function _findBestMove(gameBoard)
+    {
+        let row = "";
+        let col = "";
+        let bestValue = -Infinity;
+
+        for(let i = 0; i < gameBoard.length; i++)
+        {
+            for(let j = 0; j < gameBoard[i].length; j++)
+            {
+                if(gameBoard[i][j] == _emptyChar)
+                {
+                    gameBoard[i][j] = _cpuChar;
+                    let value = _minimax(gameBoard, false, 0);
+                    gameBoard[i][j] = _emptyChar;
+
+                    if(value > bestValue)
+                    {
+                        bestValue = value;
+                        col = i;
+                        row = j;
+                    }
+                }
+            }
+        }
+
+        console.log(`Best Value = ${bestValue} at position ${col} ${row}`);
+
+        return [col, row];
     }
 
     function _evaluateBoard(gameBoard)
@@ -192,17 +227,39 @@ var gameState = (function() {
 
     function playGame(){
 
-        let usrTurn = window.prompt("Where would you like to play?", "col row");
-        console.log(usrTurn);
+        while(!_isBoardInTerminalState(_gameBoard))
+        {
+            let usrTurn = window.prompt("Where would you like to play?", "row col");
+            console.log(usrTurn);
 
-        let usrSelection = usrTurn.split(' ');
+            let usrSelection = usrTurn.split(' ');
 
-        _gameBoard[usrSelection[0]][usrSelection[1]] = "x";
-        printBoard();
+            _gameBoard[usrSelection[0]][usrSelection[1]] = "x";
+            printBoard();
 
-        //console.log(`Evaluate: ${_evaluateBoard()}`);
+            let cpuMove = _findBestMove(_gameBoard);
+            _gameBoard[cpuMove[0]][cpuMove[1]] = "o";
+            printBoard();
 
-        console.log(_minimax(_gameBoard, true));
+            const score = _evaluateBoard(_gameBoard);
+            if(score == 10)
+            {
+                console.log("You Win");
+                return;
+            }
+            else if(score == -10)
+            {
+                console.log("Computer wins");
+                return;
+            }
+            else if(_isBoardInTerminalState(_gameBoard))
+            {
+                console.log("Tie");
+                return;
+            }
+
+        }
+        
 
     }
 
