@@ -191,6 +191,8 @@ var gameManager = (function() {
 
         console.log(`Best move value is ${bestScore} at row ${bestRow} and col ${bestCol}`)
 
+        return [bestRow, bestCol];
+
     }
   
     function printBoard(gBoard) {
@@ -215,7 +217,7 @@ var gameManager = (function() {
 
     function testEval() {
 
-        /* let testBoardRowPlayer = [];
+        let testBoardRowPlayer = [];
         let testBoardRowCpu = [];
         let testBoardColPlayer = [];
         let testBoardColCpu = [];
@@ -272,7 +274,7 @@ var gameManager = (function() {
         printBoard(testBoardTie0);
         console.log(_evaluateBoard(testBoardTie0));
         printBoard(testBoardUnfinishedGame);
-        console.log(_evaluateBoard(testBoardUnfinishedGame)); */
+        console.log(_evaluateBoard(testBoardUnfinishedGame));
 
 
         let testMini = [];
@@ -286,11 +288,25 @@ var gameManager = (function() {
 
     function playGame() {
 
-        
+        printBoard(_gameBoard);
+        while(_evaluateBoard(_gameBoard) == null)
+        {
+            
+            printBoard(_gameBoard);
 
-        
+            let cpuMove = _findBestMove(_gameBoard);
 
-        
+            _gameBoard[cpuMove[0]][cpuMove[1]] = _cpuChar;
+            printBoard(_gameBoard);
+
+            let playerMoveString = window.prompt("Make a move", "Row Column");
+            let playerMove = playerMoveString.split(" ");
+
+            _gameBoard[playerMove[0]][playerMove[1]] = _playerChar;
+        }  
+
+        let winner = _evaluateBoard(_gameBoard);
+        console.log(`Winner is ${winner}`);
     }
  
     return {
@@ -303,4 +319,4 @@ var gameManager = (function() {
   })();
 
   gameManager.initGame();
-  gameManager.testEval();
+  gameManager.playGame();
