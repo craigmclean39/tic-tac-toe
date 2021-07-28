@@ -7,11 +7,19 @@
 
     width: 100vw;
     height: 100vh;
-    background-color: red;
+    background-color: black;
 }
 
 .board-space {
 
     background-color: green;
     border: solid 1px black;
+}
+
+.board-X {
+    background-color: blue;
+}
+
+.board-O {
+    background-color: red;
 }

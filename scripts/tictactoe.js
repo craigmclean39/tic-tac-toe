@@ -1,3 +1,15 @@
+const moveFactory = (row, column) => {
+    
+    return { row, column };
+  };
+
+
+const returnMoveFactory = (status, move) => {
+
+    return {status, move};
+};
+
+
 var gameManager = (function() {
     'use strict';
 
@@ -189,22 +201,10 @@ var gameManager = (function() {
             }
         }
 
-        console.log(`Best move value is ${bestScore} at row ${bestRow} and col ${bestCol}`)
+        //console.log(`Best move value is ${bestScore} at row ${bestRow} and col ${bestCol}`)
 
         return [bestRow, bestCol];
 
-    }
-  
-    function printBoard(gBoard) {
-      for(let i = 0; i < 3; i++)
-      {
-          let tempStr = "";
-          for(let j = 0; j < 3; j++)
-          {
-              tempStr += `${gBoard[i][j]} `;
-          }
-          console.log(tempStr);
-      }
     }
 
     function initGame() {
@@ -215,78 +215,37 @@ var gameManager = (function() {
         
     }
 
-    /* function testEval() {
-
-        let testBoardRowPlayer = [];
-        let testBoardRowCpu = [];
-        let testBoardColPlayer = [];
-        let testBoardColCpu = [];
-        let testBoardDiaPlayer = [];
-        let testBoardDiaCpu = [];
-        let testBoardTie0 = [];
-        let testBoardUnfinishedGame = [];
-
-        testBoardRowPlayer.push([_emptyChar,_emptyChar,_emptyChar]);
-        testBoardRowPlayer.push([_playerChar,_playerChar,_playerChar]);
-        testBoardRowPlayer.push([_emptyChar,_emptyChar,_emptyChar]);
-        
-        testBoardRowCpu.push([_emptyChar,_emptyChar,_emptyChar]);
-        testBoardRowCpu.push([_emptyChar,_emptyChar,_emptyChar]);
-        testBoardRowCpu.push([_cpuChar,_cpuChar,_cpuChar]);
-
-        testBoardColPlayer.push([_playerChar,_emptyChar,_emptyChar]);
-        testBoardColPlayer.push([_playerChar,_emptyChar,_emptyChar]);
-        testBoardColPlayer.push([_playerChar,_emptyChar,_emptyChar]);
-
-        testBoardColCpu.push([_emptyChar,_cpuChar,_emptyChar]);
-        testBoardColCpu.push([_emptyChar,_cpuChar,_emptyChar]);
-        testBoardColCpu.push([_emptyChar,_cpuChar,_emptyChar]);
-
-        testBoardDiaPlayer.push([_playerChar,_emptyChar,_emptyChar]);
-        testBoardDiaPlayer.push([_emptyChar,_playerChar,_emptyChar]);
-        testBoardDiaPlayer.push([_emptyChar,_emptyChar,_playerChar]);
-
-        testBoardDiaCpu.push([_emptyChar,_emptyChar,_cpuChar]);
-        testBoardDiaCpu.push([_emptyChar,_cpuChar,_emptyChar]);
-        testBoardDiaCpu.push([_cpuChar,_emptyChar,_emptyChar]);
-
-        testBoardTie0.push([_playerChar,_cpuChar,_playerChar]);
-        testBoardTie0.push([_playerChar,_cpuChar,_cpuChar]);
-        testBoardTie0.push([_cpuChar,_playerChar,_playerChar]);
-
-        testBoardUnfinishedGame.push([_emptyChar,_emptyChar,_emptyChar]);
-        testBoardUnfinishedGame.push([_emptyChar,_cpuChar,_emptyChar]);
-        testBoardUnfinishedGame.push([_emptyChar,_emptyChar,_emptyChar]);
+    function playMove(move) {
+        //play a given move and return a cpu move, or invalid move, or game winning status
 
 
-        printBoard(testBoardRowPlayer);
-        console.log(_evaluateBoard(testBoardRowPlayer));
-        printBoard(testBoardRowCpu);
-        console.log(_evaluateBoard(testBoardRowCpu));
-        printBoard(testBoardColPlayer);
-        console.log(_evaluateBoard(testBoardColPlayer));
-        printBoard(testBoardColCpu);
-        console.log(_evaluateBoard(testBoardColCpu));
-        printBoard(testBoardDiaPlayer);
-        console.log(_evaluateBoard(testBoardDiaPlayer));
-        printBoard(testBoardDiaCpu);
-        console.log(_evaluateBoard(testBoardDiaCpu));
-        printBoard(testBoardTie0);
-        console.log(_evaluateBoard(testBoardTie0));
-        printBoard(testBoardUnfinishedGame);
-        console.log(_evaluateBoard(testBoardUnfinishedGame));
+        let returnMove = undefined;
+        //check if the move is valid
+        if(_gameBoard[move.row][move.column] == _emptyChar)
+        {
+            //This is a valid move, make the move
+            _gameBoard[move.row][move.column] = _playerChar;
 
 
-        let testMini = [];
-        testMini.push([_emptyChar,_emptyChar,_emptyChar]);
-        testMini.push([_emptyChar,_emptyChar,_emptyChar]);
-        testMini.push([_emptyChar,_emptyChar,_playerChar]);
+            let cpuMove = _findBestMove(_gameBoard);
+            _gameBoard[cpuMove[0]][cpuMove[1]] = _cpuChar;
+            let winState = _evaluateBoard(_gameBoard);
 
-        _findBestMove(testMini);
 
-    } */
+            returnMove = returnMoveFactory(winState, moveFactory(cpuMove[0], cpuMove[1]));
 
-    function playGame() {
+
+            return returnMove;
+        }
+        else{
+
+        }
+
+
+
+    }
+
+    /* function playGame() {
 
         printBoard(_gameBoard);
         while(_evaluateBoard(_gameBoard) == null)
@@ -307,13 +266,11 @@ var gameManager = (function() {
 
         let winner = _evaluateBoard(_gameBoard);
         console.log(`Winner is ${winner}`);
-    }
+    } */
  
     return {
         initGame: initGame,
-        printBoard: printBoard,
-        playGame: playGame
-        //testEval: testEval
+        playMove: playMove
     };
 
   })();
@@ -329,6 +286,35 @@ var gameManager = (function() {
     function _boardSpaceClicked(evt) {
 
         console.dir(evt);
+
+        let selectedRow = evt.target.dataset.row;
+        let selectedColumn = evt.target.dataset.column;
+
+        let playerMove = moveFactory(selectedRow, selectedColumn);
+
+        let cpuReturnMove  = gameManager.playMove(playerMove);
+
+        //if a valid move
+        if(cpuReturnMove.status == null)
+        {
+            //style the players move
+            evt.target.classList.add("board-X");
+
+            //style the cpu move
+            let board_spaces = _body.querySelectorAll(".board-space");
+            for(let i = 0; i < board_spaces.length; i++)
+            {
+                if((board_spaces[i].dataset.row == cpuReturnMove.move.row) && (board_spaces[i].dataset.column == cpuReturnMove.move.column))
+                {
+                    board_spaces[i].classList.add("board-O");
+                    break;
+                }
+            }
+
+
+
+        }
+
 
     }
 
@@ -346,7 +332,8 @@ var gameManager = (function() {
                 let space = document.createElement("div");
                 space.classList.add("board-space");
                 let spaceId = i.toString() + "-" + j.toString();
-                space.dataset.id = spaceId;
+                space.dataset.row = i;
+                space.dataset.column = j;
 
                 grid.addEventListener("click", _boardSpaceClicked)
 
