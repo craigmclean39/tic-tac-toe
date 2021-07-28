@@ -1,3 +1,12 @@
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+
 .grid-board {
 
     display:grid;
@@ -37,4 +46,71 @@
 
 .ttt-subtitle {
 
+}
+
+.buttons-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 60vw;
+
+}
+
+.buttons-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+
+
+}
+
+.buttons-right {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+
+}
+
+.button {
+
+    border: none;
+    margin: 1rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 5rem;
+    height: 5rem;
+}
+
+.button-unselected {
+
+    width: 4.5rem;
+    height: 4.5rem;
+    opacity: 50%;
+}
+
+.player-badge {
+
+    background-image: url("../media/hacker.png");
+}
+
+.reset-button {
+    background-image: url("../media/reset.png");
+}
+
+.player-button {
+    background-image: url("../media/hacker.png");
+}
+
+.ai-button {
+    background-image: url("../media/artificial-intelligence.png");
+}
+
+.player-name-input {
+    width: 15vw;
 }

@@ -210,6 +210,11 @@ var gameManager = (function() {
 
     function initGame() {
 
+        while(_gameBoard.length > 0)
+        {
+            _gameBoard.pop();
+        }
+
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
@@ -272,32 +277,15 @@ var gameManager = (function() {
         }
     }
 
-    /* function playGame() {
-
-        printBoard(_gameBoard);
-        while(_evaluateBoard(_gameBoard) == null)
-        {
-            
-            printBoard(_gameBoard);
-
-            let cpuMove = _findBestMove(_gameBoard);
-
-            _gameBoard[cpuMove[0]][cpuMove[1]] = _cpuChar;
-            printBoard(_gameBoard);
-
-            let playerMoveString = window.prompt("Make a move", "Row Column");
-            let playerMove = playerMoveString.split(" ");
-
-            _gameBoard[playerMove[0]][playerMove[1]] = _playerChar;
-        }  
-
-        let winner = _evaluateBoard(_gameBoard);
-        console.log(`Winner is ${winner}`);
-    } */
+    function reset()
+    {   
+        initGame();
+    }
  
     return {
         initGame: initGame,
-        playMove: playMove
+        playMove: playMove,
+        reset: reset
     };
 
   })();
@@ -356,6 +344,20 @@ var gameManager = (function() {
         }
     }
 
+    function _resetGame(evt)
+    {
+        gameManager.reset();
+
+        let spaces = _body.querySelectorAll(".board-space");
+        for(let i = 0; i < spaces.length; i++)
+        {
+            spaces[i].classList.remove("board-O");
+            spaces[i].classList.remove("board-X");
+        }
+
+        _setWinStatus(null);
+    }
+
     function _createFlex() {
 
         _flex = document.createElement("div");
@@ -369,9 +371,50 @@ var gameManager = (function() {
         _subTitle.classList.add("ttt-subtitle");
         _subTitle.innerText = "Man vs Machine";
 
+        let buttonsFlex = document.createElement("div");
+        buttonsFlex.classList.add("buttons-flex");
+
+        let buttonsLeft = document.createElement("div");
+        buttonsLeft.classList.add("buttons-left");
+
+        let playerBadge = document.createElement("button");
+        playerBadge.classList.add("player-badge");
+        playerBadge.classList.add("button");
+
+        let playerName = document.createElement("input");
+        playerName.type = "text";
+        playerName.classList.add("player-name-input");
+
+        buttonsLeft.appendChild(playerBadge);
+        buttonsLeft.appendChild(playerName);
+
+
+        let buttonsRight = document.createElement("div");
+        buttonsRight.classList.add("buttons-right");
+
+        let playerButton = document.createElement("button");
+        playerButton.classList.add("player-button");
+        playerButton.classList.add("button");
+        playerButton.classList.add("button-unselected");
+        let aiButton = document.createElement("button");
+        aiButton.classList.add("ai-button");
+        aiButton.classList.add("button");
+
+        buttonsRight.appendChild(playerButton);
+        buttonsRight.appendChild(aiButton);
+
+        buttonsFlex.appendChild(buttonsLeft);
+        buttonsFlex.appendChild(buttonsRight);
+
+        let resetButton = document.createElement("button");
+        resetButton.classList.add("reset-button");
+        resetButton.classList.add("button");
+        resetButton.addEventListener("click", _resetGame);
+
         _flex.appendChild(_title);
         _flex.appendChild(_subTitle);
-
+        _flex.appendChild(buttonsFlex);
+        _flex.append(resetButton);
         _body.appendChild(_flex);
 
     }
@@ -431,6 +474,11 @@ var gameManager = (function() {
                 _winStatus.innerText = "It's a tie."
                 break;
             }
+            case null:
+            {
+                _winStatus.innerText = ""
+                break;
+            }
         }
 
     }
@@ -441,8 +489,6 @@ var gameManager = (function() {
         _createFlex();
         _createBoard();
         _createWinStatus();
-
-
     }
 
 
