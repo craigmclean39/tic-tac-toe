@@ -215,7 +215,7 @@ var gameManager = (function() {
         
     }
 
-    function testEval() {
+    /* function testEval() {
 
         let testBoardRowPlayer = [];
         let testBoardRowCpu = [];
@@ -284,7 +284,7 @@ var gameManager = (function() {
 
         _findBestMove(testMini);
 
-    }
+    } */
 
     function playGame() {
 
@@ -312,11 +312,72 @@ var gameManager = (function() {
     return {
         initGame: initGame,
         printBoard: printBoard,
-        playGame: playGame,
-        testEval: testEval
+        playGame: playGame
+        //testEval: testEval
     };
 
   })();
 
+
+
+
+  var domManager = (function() {
+    'use strict';
+
+    let _body = null;
+
+    function _boardSpaceClicked(evt) {
+
+        console.dir(evt);
+
+    }
+
+    function _createBoard() {
+
+        let grid = document.createElement("div");
+        grid.classList.add("grid-board");
+
+
+        //Create the 9 grid spaces, give them a unique id in their data attribute and attach event listeners
+        for(let i = 0; i < 3; i++)
+        {
+            for(let j = 0; j < 3; j++)
+            {
+                let space = document.createElement("div");
+                space.classList.add("board-space");
+                let spaceId = i.toString() + "-" + j.toString();
+                space.dataset.id = spaceId;
+
+                grid.addEventListener("click", _boardSpaceClicked)
+
+                grid.appendChild(space);
+            }
+        }
+
+        _body.appendChild(grid);
+        
+
+    }
+
+    function init()
+    {
+        _body = document.querySelector("body");
+        _createBoard();
+
+
+    }
+
+
+
+    return {
+
+        init: init
+    };
+
+
+  })();
+
+
   gameManager.initGame();
-  gameManager.playGame();
+  domManager.init();
+  //gameManager.playGame();
