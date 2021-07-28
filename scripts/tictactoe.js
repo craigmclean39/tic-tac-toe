@@ -17,6 +17,7 @@ var gameManager = (function() {
     let _playerChar = 'x';
     let _cpuChar = 'o';
     let _emptyChar = "_";
+    let _gameInProgress = false;
 
     let _winStates = {
         player: -10,
@@ -212,24 +213,50 @@ var gameManager = (function() {
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
         _gameBoard.push([_emptyChar,_emptyChar,_emptyChar]);
+
+        _gameInProgress = true;
         
     }
 
     function playMove(move) {
+
+
+
+
         //play a given move and return a cpu move, or invalid move, or game winning status
-
-
         let returnMove = undefined;
-        //check if the move is valid
+
+        if(!_gameInProgress)
+        {
+            return returnMove;
+
+        }
+        //check if the spot is empty
         if(_gameBoard[move.row][move.column] == _emptyChar)
         {
             //This is a valid move, make the move
             _gameBoard[move.row][move.column] = _playerChar;
 
+            let status = _evaluateBoard(_gameBoard);
+            //if the player won or there is a tie, return
+            if(status == "player" || status == "tie")
+            {
+                _gameInProgress = false;
+                returnMove = returnMoveFactory(status, null);
+                return returnMove;
+            }
+            
 
+            //if the player hasn't won, find the best cpu move and return
             let cpuMove = _findBestMove(_gameBoard);
             _gameBoard[cpuMove[0]][cpuMove[1]] = _cpuChar;
             let winState = _evaluateBoard(_gameBoard);
+
+            //if someone has won, set the gameInProgess flag to false
+            if(winState != null)
+            {
+                _gameInProgress = false;
+            }
 
 
             returnMove = returnMoveFactory(winState, moveFactory(cpuMove[0], cpuMove[1]));
@@ -239,10 +266,10 @@ var gameManager = (function() {
         }
         else{
 
+            //return undefined
+            return returnMove;
+
         }
-
-
-
     }
 
     /* function playGame() {
@@ -282,6 +309,10 @@ var gameManager = (function() {
     'use strict';
 
     let _body = null;
+    let _flex = null;
+    let _title = null;
+    let _subTitle = null;
+    let _winStatus = null;
 
     function _boardSpaceClicked(evt) {
 
@@ -295,26 +326,53 @@ var gameManager = (function() {
         let cpuReturnMove  = gameManager.playMove(playerMove);
 
         //if a valid move
-        if(cpuReturnMove.status == null)
+        if(cpuReturnMove != null)
         {
-            //style the players move
-            evt.target.classList.add("board-X");
-
-            //style the cpu move
-            let board_spaces = _body.querySelectorAll(".board-space");
-            for(let i = 0; i < board_spaces.length; i++)
+            //and the player hasn't won, which means there is a cpu move
+            if(cpuReturnMove.status != "player")
             {
-                if((board_spaces[i].dataset.row == cpuReturnMove.move.row) && (board_spaces[i].dataset.column == cpuReturnMove.move.column))
+                //style the players move
+                evt.target.classList.add("board-X");
+
+                if(cpuReturnMove.status != "tie")
                 {
-                    board_spaces[i].classList.add("board-O");
-                    break;
-                }
+                    //style the cpu move
+                    let board_spaces = _body.querySelectorAll(".board-space");
+                    for(let i = 0; i < board_spaces.length; i++)
+                    {
+                        if((board_spaces[i].dataset.row == cpuReturnMove.move.row) && (board_spaces[i].dataset.column == cpuReturnMove.move.column))
+                        {
+                            board_spaces[i].classList.add("board-O");
+                            break;
+                        }
+                    }
+                }  
             }
 
-
-
+            if(cpuReturnMove.status != null)
+            {
+                _setWinStatus(cpuReturnMove.status);
+            }
         }
+    }
 
+    function _createFlex() {
+
+        _flex = document.createElement("div");
+        _flex.classList.add("flex-container");
+
+        _title = document.createElement("h1");
+        _title.classList.add("ttt-title");
+        _title.innerText = "Tic Tac Toe";
+
+        _subTitle = document.createElement("h2");
+        _subTitle.classList.add("ttt-subtitle");
+        _subTitle.innerText = "Man vs Machine";
+
+        _flex.appendChild(_title);
+        _flex.appendChild(_subTitle);
+
+        _body.appendChild(_flex);
 
     }
 
@@ -341,15 +399,48 @@ var gameManager = (function() {
             }
         }
 
-        _body.appendChild(grid);
-        
+        _flex.appendChild(grid);
+    }
+
+    function _createWinStatus() {
+
+        _winStatus = document.createElement("h2");
+        _winStatus.classList.add("ttt-winStatus");
+
+        _flex.appendChild(_winStatus);
+
+    }
+
+    function _setWinStatus(status)
+    {
+
+        switch(status)
+        {
+            case "player":
+            {
+                _winStatus.innerText = "Player Won!"
+                break;
+            }
+            case "cpu":
+            {
+                _winStatus.innerText = "Computer Won!"
+                break;
+            }
+            case "tie":
+            {
+                _winStatus.innerText = "It's a tie."
+                break;
+            }
+        }
 
     }
 
     function init()
     {
         _body = document.querySelector("body");
+        _createFlex();
         _createBoard();
+        _createWinStatus();
 
 
     }
