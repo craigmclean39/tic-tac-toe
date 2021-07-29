@@ -1,12 +1,37 @@
+:root {
+
+    --border-size: .25rem;
+}
+
 html {
     font-size: 62.5%;
+    font-family: 'Comfortaa', cursive;
 }
 
 body {
+    width: 100vw;
+    height: 100vh;
     font-size: 1.6rem;
+    background-image: linear-gradient(to top, rgb(236, 72, 153), rgb(239, 68, 68), rgb(245, 158, 11));
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
+h1 {
+    font-size: 6rem;
+    font-weight: bold;
+    padding: 2rem;
+}
 
+h2 {
+    font-size: 2rem;
+    
+}
+
+h3 {
+    font-size: 2rem;
+    margin: 1.5rem;
+}
 .grid-board {
 
     display:grid;
@@ -14,23 +39,73 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
 
-    width: 60vw;
-    height: 60vh;
-    background-color: black;
+    width: 30rem;
+    height: 30rem;
 }
 
 .board-space {
 
-    background-color: green;
-    border: solid 1px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.space00 {
+    border-bottom: solid var(--border-size) black;
+    border-right: solid var(--border-size) black;
+}
+
+.space01 {
+    border-left: solid var(--border-size) black;
+    border-bottom: solid var(--border-size) black;
+    border-right: solid var(--border-size) black;
+}
+
+.space02 {
+    border-bottom: solid var(--border-size) black;
+    border-left: solid var(--border-size) black;
+}
+
+.space10 {
+    border-bottom: solid var(--border-size) black;
+    border-right: solid var(--border-size) black;
+    border-top: solid var(--border-size) black;
+}
+
+.space11 {
+    border: solid var(--border-size) black;
+}
+
+.space12 {
+    border-top: solid var(--border-size) black;
+    border-bottom: solid var(--border-size) black;
+    border-left: solid var(--border-size) black;
+}
+
+.space20 {
+    border-top: solid var(--border-size) black;
+    border-right: solid var(--border-size) black;
+}
+
+.space21 {
+    border-left: solid var(--border-size) black;
+    border-top: solid var(--border-size) black;
+    border-right: solid var(--border-size) black;
+}
+
+.space22 {
+    border-top: solid var(--border-size) black;
+    border-left: solid var(--border-size) black;
 }
 
 .board-X {
-    background-color: blue;
+    font-size: 7rem;
+    color: #FFBE0B;
 }
 
 .board-O {
-    background-color: red;
+    font-size: 7rem;
+    color: #3A86FF;
 }
 
 .flex-container {
@@ -41,6 +116,11 @@ body {
 }
 
 .ttt-title {
+
+    color: #8338EC;
+    background: -webkit-linear-gradient(90deg, #FB5607,#FF006E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 
 }
 
@@ -53,7 +133,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
 
-    width: 60vw;
+    width: 80vw;
 
 }
 
@@ -83,14 +163,14 @@ body {
     margin: 1rem;
     background-size: cover;
     background-repeat: no-repeat;
-    width: 5rem;
-    height: 5rem;
+    width: 3rem;
+    height: 3rem;
 }
 
 .button-unselected {
 
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 2rem;
+    height: 2rem;
     opacity: 50%;
 }
 
@@ -112,5 +192,5 @@ body {
 }
 
 .player-name-input {
-    width: 15vw;
+    width: 4rem;
 }

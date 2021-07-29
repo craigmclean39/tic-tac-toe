@@ -1,0 +1,212 @@
+var domManager = (function() {
+    'use strict';
+
+    let _body = null;
+    let _flex = null;
+    let _title = null;
+    let _subTitle = null;
+    let _winStatus = null;
+
+    function _boardSpaceClicked(evt) {
+
+        console.dir(evt);
+
+        let selectedRow = evt.target.dataset.row;
+        let selectedColumn = evt.target.dataset.column;
+
+        let playerMove = moveFactory(selectedRow, selectedColumn);
+
+        let cpuReturnMove  = gameManager.playMove(playerMove);
+
+        //if a valid move
+        if(cpuReturnMove != null)
+        {
+            //and the player hasn't won, which means there is a cpu move
+            if(cpuReturnMove.status != "player")
+            {
+                //style the players move
+                evt.target.classList.add("board-X");
+                evt.target.innerText = "X";
+
+                if(cpuReturnMove.status != "tie")
+                {
+                    //style the cpu move
+                    let board_spaces = _body.querySelectorAll(".board-space");
+                    for(let i = 0; i < board_spaces.length; i++)
+                    {
+                        if((board_spaces[i].dataset.row == cpuReturnMove.move.row) && (board_spaces[i].dataset.column == cpuReturnMove.move.column))
+                        {
+                            board_spaces[i].classList.add("board-O");
+                            board_spaces[i].innerText = "O";
+                            break;
+                        }
+                    }
+                }  
+            }
+
+            if(cpuReturnMove.status != null)
+            {
+                _setWinStatus(cpuReturnMove.status);
+            }
+        }
+    }
+
+    function _resetGame(evt)
+    {
+        gameManager.reset();
+
+        let spaces = _body.querySelectorAll(".board-space");
+        for(let i = 0; i < spaces.length; i++)
+        {
+            spaces[i].innerText = "";
+            spaces[i].classList.remove("board-O");
+            spaces[i].classList.remove("board-X");
+        }
+
+        _setWinStatus(null);
+    }
+
+    function _createFlex() {
+
+        _flex = document.createElement("div");
+        _flex.classList.add("flex-container");
+
+        _title = document.createElement("h1");
+        _title.classList.add("ttt-title");
+        _title.innerText = "Tic Tac Toe";
+
+        _subTitle = document.createElement("h2");
+        _subTitle.classList.add("ttt-subtitle");
+        _subTitle.innerText = "Man vs Machine";
+
+        let buttonsFlex = document.createElement("div");
+        buttonsFlex.classList.add("buttons-flex");
+
+        let buttonsLeft = document.createElement("div");
+        buttonsLeft.classList.add("buttons-left");
+
+        let playerBadge = document.createElement("button");
+        playerBadge.classList.add("player-badge");
+        playerBadge.classList.add("button");
+
+        let playerName = document.createElement("input");
+        playerName.type = "text";
+        playerName.classList.add("player-name-input");
+
+        buttonsLeft.appendChild(playerBadge);
+        buttonsLeft.appendChild(playerName);
+
+
+        let buttonsRight = document.createElement("div");
+        buttonsRight.classList.add("buttons-right");
+
+        let playerButton = document.createElement("button");
+        playerButton.classList.add("player-button");
+        playerButton.classList.add("button");
+        playerButton.classList.add("button-unselected");
+        let aiButton = document.createElement("button");
+        aiButton.classList.add("ai-button");
+        aiButton.classList.add("button");
+
+        buttonsRight.appendChild(playerButton);
+        buttonsRight.appendChild(aiButton);
+
+        buttonsFlex.appendChild(buttonsLeft);
+        buttonsFlex.appendChild(buttonsRight);
+
+        let resetButton = document.createElement("button");
+        resetButton.classList.add("reset-button");
+        resetButton.classList.add("button");
+        resetButton.addEventListener("click", _resetGame);
+
+        _flex.appendChild(_title);
+        _flex.appendChild(_subTitle);
+        //_flex.appendChild(buttonsFlex);
+        _flex.append(resetButton);
+        _body.appendChild(_flex);
+
+    }
+
+    function _createBoard() {
+
+        let grid = document.createElement("div");
+        grid.classList.add("grid-board");
+
+
+        //Create the 9 grid spaces, give them a unique id in their data attribute and attach event listeners
+        for(let i = 0; i < 3; i++)
+        {
+            for(let j = 0; j < 3; j++)
+            {
+                let space = document.createElement("div");
+                space.classList.add("board-space");
+                space.classList.add(`space${i}${j}`);
+                let spaceId = i.toString() + "-" + j.toString();
+                space.dataset.row = i;
+                space.dataset.column = j;
+
+                grid.addEventListener("click", _boardSpaceClicked)
+
+                grid.appendChild(space);
+            }
+        }
+
+        _flex.appendChild(grid);
+    }
+
+    function _createWinStatus() {
+
+        _winStatus = document.createElement("h3");
+        _winStatus.classList.add("ttt-winStatus");
+
+        _flex.appendChild(_winStatus);
+
+    }
+
+    function _setWinStatus(status)
+    {
+
+        switch(status)
+        {
+            case "player":
+            {
+                _winStatus.innerText = "You have bested the machine!"
+                break;
+            }
+            case "cpu":
+            {
+                _winStatus.innerText = "The Machine has prevailed!"
+                break;
+            }
+            case "tie":
+            {
+                _winStatus.innerText = "Stalemate. Better luck next time."
+                break;
+            }
+            case null:
+            {
+                _winStatus.innerText = ""
+                break;
+            }
+        }
+
+    }
+
+    function init()
+    {
+        _body = document.querySelector("body");
+        _createFlex();
+        _createBoard();
+        _createWinStatus();
+    }
+
+
+
+    return {
+
+        init: init
+    };
+
+
+  })();
+
