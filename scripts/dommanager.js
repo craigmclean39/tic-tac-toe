@@ -81,41 +81,6 @@ var domManager = (function() {
         _subTitle.classList.add("ttt-subtitle");
         _subTitle.innerText = "Man vs Machine";
 
-        let buttonsFlex = document.createElement("div");
-        buttonsFlex.classList.add("buttons-flex");
-
-        let buttonsLeft = document.createElement("div");
-        buttonsLeft.classList.add("buttons-left");
-
-        let playerBadge = document.createElement("button");
-        playerBadge.classList.add("player-badge");
-        playerBadge.classList.add("button");
-
-        let playerName = document.createElement("input");
-        playerName.type = "text";
-        playerName.classList.add("player-name-input");
-
-        buttonsLeft.appendChild(playerBadge);
-        buttonsLeft.appendChild(playerName);
-
-
-        let buttonsRight = document.createElement("div");
-        buttonsRight.classList.add("buttons-right");
-
-        let playerButton = document.createElement("button");
-        playerButton.classList.add("player-button");
-        playerButton.classList.add("button");
-        playerButton.classList.add("button-unselected");
-        let aiButton = document.createElement("button");
-        aiButton.classList.add("ai-button");
-        aiButton.classList.add("button");
-
-        buttonsRight.appendChild(playerButton);
-        buttonsRight.appendChild(aiButton);
-
-        buttonsFlex.appendChild(buttonsLeft);
-        buttonsFlex.appendChild(buttonsRight);
-
         let resetButton = document.createElement("button");
         resetButton.classList.add("reset-button");
         resetButton.classList.add("button");
