@@ -25,8 +25,9 @@ var domManager = (function() {
             if(cpuReturnMove.status != "player")
             {
                 //style the players move
-                evt.target.classList.add("board-X");
-                evt.target.innerText = "X";
+                let xText = evt.target.querySelector(".space-text");
+                xText.classList.add("board-X");
+                xText.innerText = "X";
 
                 if(cpuReturnMove.status != "tie")
                 {
@@ -36,8 +37,9 @@ var domManager = (function() {
                     {
                         if((board_spaces[i].dataset.row == cpuReturnMove.move.row) && (board_spaces[i].dataset.column == cpuReturnMove.move.column))
                         {
-                            board_spaces[i].classList.add("board-O");
-                            board_spaces[i].innerText = "O";
+                            let spaceText = board_spaces[i].querySelector(".space-text");
+                            spaceText.classList.add("board-O");
+                            spaceText.innerText = "O";
                             break;
                         }
                     }
@@ -55,7 +57,7 @@ var domManager = (function() {
     {
         gameManager.reset();
 
-        let spaces = _body.querySelectorAll(".board-space");
+        let spaces = _body.querySelectorAll(".space-text");
         for(let i = 0; i < spaces.length; i++)
         {
             spaces[i].innerText = "";
@@ -146,6 +148,11 @@ var domManager = (function() {
                 space.dataset.column = j;
 
                 grid.addEventListener("click", _boardSpaceClicked)
+
+                let spaceText = document.createElement("div");
+                spaceText.classList.add("space-text");
+
+                space.appendChild(spaceText);
 
                 grid.appendChild(space);
             }
