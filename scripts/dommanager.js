@@ -9,7 +9,7 @@ var domManager = (function() {
 
     function _boardSpaceClicked(evt) {
 
-        console.dir(evt);
+        //console.dir(evt);
 
         let selectedRow = evt.target.dataset.row;
         let selectedColumn = evt.target.dataset.column;
@@ -153,6 +153,7 @@ var domManager = (function() {
     function _createFooter() {
         let footer = document.createElement("div");
         footer.classList.add("footer");
+        footer.innerHTML = "<p>Project: Tic Tac Toe<br><a href='https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/tic-tac-toe' target='_blank'>The Odin Project: Full Stack Javascript</a><br>By Craig McLean</p>";
         _body.appendChild(footer);
     }
 
@@ -176,8 +177,6 @@ var domManager = (function() {
                 }
             }
         }
-
-
     }
 
     function _setWinStatus(status)
@@ -220,7 +219,7 @@ var domManager = (function() {
         _createFlex();
         _createBoard();
         _createWinStatus();
-        //_createFooter();
+        _createFooter();
     }
 
 
