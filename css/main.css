@@ -52,6 +52,10 @@ h3 {
     align-items: center;
 }
 
+.space-text {
+    user-select: none;
+}
+
 .space00 {
     border-bottom: solid var(--border-size) black;
     border-right: solid var(--border-size) black;
@@ -182,22 +186,40 @@ h3 {
     opacity: 50%;
 }
 
+.sub-banner {
+    display: flex;
+    align-items: center;
+}
+
 .player-badge {
 
-    background-image: url("../media/hacker.png");
+    border: none;
+    margin: 1rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 5rem;
+    height: 5rem;
+    background-image: url("../media/hacker.svg");
 }
+
+.ai-badge {
+    background-image: url("../media/artificial-intelligence.svg");
+    border: none;
+    margin: 1rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 5rem;
+    height: 5rem;
+}
+
 
 .reset-button {
-    background-image: url("../media/reset.png");
+    background-image: url("../media/reset.svg");
+    background-color: transparent;
+    width: 4rem;
+    height: 4rem;
 }
 
-.player-button {
-    background-image: url("../media/hacker.png");
-}
-
-.ai-button {
-    background-image: url("../media/artificial-intelligence.png");
-}
 
 .player-name-input {
     width: 4rem;

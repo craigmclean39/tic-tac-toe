@@ -77,9 +77,24 @@ var domManager = (function() {
         _title.classList.add("ttt-title");
         _title.innerText = "Tic Tac Toe";
 
+        let subBanner = document.createElement("div");
+        subBanner.classList.add("sub-banner");
+
+        let man = document.createElement("div");
+        man.classList.add("player-badge");
+
+        let ai = document.createElement("div");
+        ai.classList.add("ai-badge");
+
+
+
         _subTitle = document.createElement("h2");
         _subTitle.classList.add("ttt-subtitle");
         _subTitle.innerText = "Man vs Machine";
+
+        subBanner.appendChild(man);
+        subBanner.appendChild(_subTitle);
+        subBanner.appendChild(ai);
 
         let resetButton = document.createElement("button");
         resetButton.classList.add("reset-button");
@@ -87,8 +102,7 @@ var domManager = (function() {
         resetButton.addEventListener("click", _resetGame);
 
         _flex.appendChild(_title);
-        _flex.appendChild(_subTitle);
-        //_flex.appendChild(buttonsFlex);
+        _flex.appendChild(subBanner);
         _flex.append(resetButton);
         _body.appendChild(_flex);
 
