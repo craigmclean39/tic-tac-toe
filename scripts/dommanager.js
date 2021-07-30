@@ -63,6 +63,7 @@ var domManager = (function() {
             spaces[i].innerText = "";
             spaces[i].classList.remove("board-O");
             spaces[i].classList.remove("board-X");
+            spaces[i].classList.remove("blur");
         }
 
         _setWinStatus(null);
@@ -155,6 +156,30 @@ var domManager = (function() {
         _body.appendChild(footer);
     }
 
+    function _blurPlayer(player)
+    {
+        let spaces = _body.querySelectorAll(".space-text");
+        for(let i = 0; i < spaces.length; i++)
+        {
+            if(player == "player")
+            {
+                if(spaces[i].innerText == "X")
+                {
+                    spaces[i].classList.add("blur");
+                }
+            }
+            else if(player == "cpu")
+            {
+                if(spaces[i].innerText == "O")
+                {
+                    spaces[i].classList.add("blur");
+                }
+            }
+        }
+
+
+    }
+
     function _setWinStatus(status)
     {
 
@@ -163,11 +188,13 @@ var domManager = (function() {
             case "player":
             {
                 _winStatus.innerText = "You have bested the machine!";
+                _blurPlayer("cpu");
                 break;
             }
             case "cpu":
             {
                 _winStatus.innerText = "The Machine has prevailed!";
+                _blurPlayer("player");
                 break;
             }
             case "tie":
