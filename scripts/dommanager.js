@@ -149,6 +149,12 @@ var domManager = (function() {
 
     }
 
+    function _createFooter() {
+        let footer = document.createElement("div");
+        footer.classList.add("footer");
+        _body.appendChild(footer);
+    }
+
     function _setWinStatus(status)
     {
 
@@ -156,25 +162,28 @@ var domManager = (function() {
         {
             case "player":
             {
-                _winStatus.innerText = "You have bested the machine!"
+                _winStatus.innerText = "You have bested the machine!";
                 break;
             }
             case "cpu":
             {
-                _winStatus.innerText = "The Machine has prevailed!"
+                _winStatus.innerText = "The Machine has prevailed!";
                 break;
             }
             case "tie":
             {
-                _winStatus.innerText = "Stalemate. Better luck next time."
+                _winStatus.innerText = "Stalemate. Better luck next time.";
                 break;
             }
             case null:
             {
-                _winStatus.innerText = ""
-                break;
+                _winStatus.innerText = "";
+                _winStatus.classList.remove("winStatus-animation");
+                return;
             }
         }
+
+        _winStatus.classList.add("winStatus-animation");
 
     }
 
@@ -184,6 +193,7 @@ var domManager = (function() {
         _createFlex();
         _createBoard();
         _createWinStatus();
+        //_createFooter();
     }
 
 
