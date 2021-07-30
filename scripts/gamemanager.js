@@ -102,7 +102,7 @@ var gameManager = (function() {
         }
     }
 
-    function _minimax(gBoard, isMaximizer)
+    function _minimax(gBoard, isMaximizer, depth)
     {
         let boardStatus = _evaluateBoard(gBoard);
 
@@ -110,7 +110,7 @@ var gameManager = (function() {
         if(boardStatus != null)
         {
             //console.log("winstate");
-            return _winStates[boardStatus];
+            return _winStates[boardStatus] - depth;
         }
 
 
@@ -130,7 +130,7 @@ var gameManager = (function() {
                         //do the cpu move
                         gBoard[i][j] = _cpuChar;
 
-                        let score = _minimax(gBoard, false);
+                        let score = _minimax(gBoard, false, depth + 1);
 
                         //undo the cpu move
                         gBoard[i][j] = _emptyChar;
@@ -159,7 +159,7 @@ var gameManager = (function() {
                         //do the player(minimizer) move
                         gBoard[i][j] = _playerChar;
 
-                        let score = _minimax(gBoard, true);
+                        let score = _minimax(gBoard, true, depth + 1);
 
                         //undo the cpu move
                         gBoard[i][j] = _emptyChar;
@@ -187,7 +187,7 @@ var gameManager = (function() {
                 {
                     gBoard[i][j] = _cpuChar;
 
-                    let moveScore = _minimax(gBoard, false);
+                    let moveScore = _minimax(gBoard, false, 0);
 
                     gBoard[i][j] = _emptyChar;
 
